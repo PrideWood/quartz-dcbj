@@ -1,0 +1,58 @@
+name: Deploy Quartz to GitHub Pages
+on:
+  schedule:
+    - cron: 0 */6 * * *
+  push:
+    branches:
+      - v4
+  workflow_dispatch: null
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Site Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout Content Repo
+        uses: actions/checkout@v4
+        with:
+          repository: PrideWood/quartz-content
+          token: '${{ secrets.ACCESS_TOKEN }}'
+          path: content
+      - name: Clean up content directory
+        run: |
+          rm -rf content/.git
+          rm -rf content/.obsidian
+          # 根据需要添加更多要清理的文件/文件夹
+          find content -name ".DS_Store" -delete
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build Quartz
+        run: npx quartz build
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: '${{ steps.deployment.outputs.page_url }}'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
