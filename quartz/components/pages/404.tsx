@@ -9,6 +9,19 @@ const NotFound: QuartzComponent = ({ cfg }: QuartzComponentProps) => {
   return (
     <article class="popover-hint">
       <h1>404</h1>
+
+      {/* 添加 SVG 插图 */}
+      <img
+        src="static/404-illustration.svg"
+        alt="Not found illustration"
+        style={{
+          maxWidth: "200px",
+          width: "100%",
+          margin: "2rem 0",
+          display: "block"
+        }}
+      />
+
       <p>{i18n(cfg.locale).pages.error.notFound}</p>
       <a href={baseDir}>{i18n(cfg.locale).pages.error.home}</a>
     </article>
