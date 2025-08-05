@@ -16,6 +16,8 @@ export default ((opts?: Options) => {
         <p>
           {i18n(cfg.locale).components.footer.createdWith}{" "}
           <a href="https://quartz.jzhao.xyz/">Quartz v{version}</a> © {year}
+          <br />
+          <a href="https://icp.gov.moe/?keyword=20251412" target="_blank">萌ICP备20251412号</a>
         </p>
         <ul>
           {Object.entries(links).map(([text, link]) => (
