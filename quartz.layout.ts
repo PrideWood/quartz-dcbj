@@ -11,6 +11,7 @@ export const sharedPageComponents: SharedLayout = {
       GitHub: "https://github.com/PrideWood",
       "douban": "https://www.douban.com/people/PW2018",
       "bilibili": "https://space.bilibili.com/28065777",
+      "rednote": "https://www.xiaohongshu.com/user/profile/5db8680b0000000001000e14",
     },
   }),
 }

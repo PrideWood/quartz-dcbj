@@ -18,6 +18,9 @@ export default ((opts?: Options) => {
           <a href="https://quartz.jzhao.xyz/">Quartz v{version}</a> © {year}
           <br />
           <a href="https://icp.gov.moe/?keyword=20251412" target="_blank">萌ICP备20251412号</a>
+          <a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener" title="开往-友链接力">
+            &nbsp;&nbsp;🚇Travelling
+          </a>
         </p>
         <ul>
           {Object.entries(links).map(([text, link]) => (
