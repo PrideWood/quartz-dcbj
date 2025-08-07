@@ -38,7 +38,21 @@ const ExternalLinkButton = () =>
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [],
+  afterBody: [
+    Component.ConditionalRender({
+      condition: (page) => page.fileData.slug === "index",
+      component: Component.Comments({
+        provider: "giscus",
+        options: {
+          repo: "PrideWood/quartz-dcbj",
+          repoId: "R_kgDOPW9Wcg",
+          category: "Announcements",
+          categoryId: "DIC_kwDOPW9Wcs4Ct4cI",
+          lang: "zh-CN"
+        }
+      }),
+    })
+  ],
   footer: Component.Footer({
     links: {
       GitHub: "https://github.com/PrideWood",
