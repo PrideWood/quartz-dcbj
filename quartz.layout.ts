@@ -88,7 +88,7 @@ export const defaultContentPageLayout: PageLayout = {
         { Component: ExternalLinkButton }, // 添加“开往”链接
       ],
     }),
-    Component.Explorer(),
+    Component.DesktopOnly(Component.Explorer()),
   ],
   right: [
     // Component.Graph(),

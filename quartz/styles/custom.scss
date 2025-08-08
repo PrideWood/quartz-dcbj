@@ -1,3 +1,85 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+
+
+/* 基础：亮色（默认） */
+html,
+body {
+  min-height: 100%;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(1000px 600px at 10% -10%, rgba(255, 200, 160, .28), transparent 60%),
+    radial-gradient(800px 500px at 90% 120%, rgba(120, 180, 255, .22), transparent 60%),
+    linear-gradient(120deg, #EFF2EC, #F3FFF0 50%, #EAF3FF);
+  filter: saturate(1.05) contrast(1.02);
+}
+
+/* 夜间：用 saved-theme="dark" 作为钩子 */
+html[saved-theme="dark"] body::before {
+  background:
+    radial-gradient(900px 560px at 15% -10%, rgba(255, 180, 120, .12), transparent 60%),
+    radial-gradient(700px 480px at 85% 120%, rgba(100, 150, 255, .12), transparent 60%),
+    linear-gradient(120deg, #0B1020, #0E1526 60%, #09121C);
+  filter: saturate(1) contrast(1.04);
+}
+
+/* （可选）轻微噪点纹理 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .06;
+  background-image: radial-gradient(rgba(0, 0, 0, .6) 1px, transparent 1px);
+  background-size: 2px 2px;
+  mix-blend-mode: soft-light;
+}
+
+/* 如果还有“阅读模式”可能改变背景，可按需覆盖 */
+html[reader-mode="on"] body::before {
+  filter: saturate(.18) contrast(1.0);
+}
+
+/* 让左侧 sidebar 背景透明，渐变背景透上来 */
+.left.sidebar {
+  background: transparent !important;
+  box-shadow: none !important;
+  /* 去掉可能的阴影 */
+  backdrop-filter: none !important;
+  /* 如果有毛玻璃效果则取消 */
+}
+
+/* 移动端：让顶部 leftbar 不再固定，随内容滚动 */
+@media (max-width: 800px) {
+
+  /* 1) 取消固定/吸顶效果 */
+  .left.sidebar {
+    position: static !important;
+    /* 覆盖 sticky / fixed */
+    top: auto !important;
+    inset: auto !important;
+    z-index: auto !important;
+    /* 防止遮挡内容 */
+    background: transparent;
+    /* 你当前的透明方案保留 */
+  }
+
+  /* 2) 如果主题为固定头部预留了上内边距/间距，这里一并清掉 */
+  .page,
+  .page>.content,
+  main {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+}
