@@ -82,4 +82,64 @@ html[reader-mode="on"] body::before {
     margin-top: 0 !important;
   }
 
+  /* 对齐 icon 行 */
+  .left.sidebar .flex-component {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  .left.sidebar .flex-component .search-button,
+  .left.sidebar .flex-component .darkmode,
+  .left.sidebar .flex-component .readermode,
+  .left.sidebar .flex-component a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 10px;
+    line-height: 1;
+    border: 0;
+    -webkit-appearance: none;
+  }
+
+  .left.sidebar .flex-component .search-button p {
+    margin: 0;
+    line-height: 1;
+  }
+
+  .left.sidebar .flex-component svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+    /* iOS 不再下坠 */
+  }
+
+  .left.sidebar .flex-component a[title="开往-友链接力"] svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* 默认（亮色）：只显示太阳，隐藏月亮 */
+  .left.sidebar .darkmode .dayIcon {
+    display: block;
+  }
+
+  .left.sidebar .darkmode .nightIcon {
+    display: none;
+  }
+
+  /* 夜间：只显示月亮，隐藏太阳 */
+  html[saved-theme="dark"] .left.sidebar .darkmode .dayIcon {
+    display: none;
+  }
+
+  html[saved-theme="dark"] .left.sidebar .darkmode .nightIcon {
+    display: block;
+  }
+
+  /* 可选：给图标一个轻微过渡，切换更顺滑 */
+  .left.sidebar .darkmode svg {
+    transition: opacity .5s ease;
+  }
 }
