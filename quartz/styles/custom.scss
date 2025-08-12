@@ -181,8 +181,7 @@ html[reader-mode="on"] body::before {
   background: transparent;
 }
 
-
-/* 表头：加底纹 比偶数行的底纹更深*/
+/* 表头：加底纹，比偶数行的底纹更深 */
 .table-container thead th {
   padding: 0.65rem 0.8rem;
   text-align: left;
@@ -190,7 +189,6 @@ html[reader-mode="on"] body::before {
   border-bottom: 1px solid var(--lightgray);
   background: color-mix(in oklab, var(--highlight) 60%, transparent);
 }
-
 
 /* 单元格：换行友好，右侧边线，最后一列不画线 */
 .table-container td,
@@ -232,5 +230,6 @@ html[reader-mode="on"] body::before {
 }
 
 .table-container td a {
-  text-decoration: underline;
+  text-decoration: none;
+  /* 链接无下划线 */
 }
