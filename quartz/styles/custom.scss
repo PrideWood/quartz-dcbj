@@ -211,15 +211,11 @@ html[reader-mode="on"] body::before {
 
 /* 深色模式微调 */
 :root[saved-theme="dark"] .table-container thead th {
-  background: color-mix(in oklab, var(--darkgray) 60%, transparent);
+  background: color-mix(in oklab, var(--darkgray) 20%, transparent);
 }
 
 :root[saved-theme="dark"] .table-container tbody tr:nth-child(even) {
-  background: color-mix(in oklab, var(--darkgray) 40%, transparent);
-}
-
-:root[saved-theme="dark"] .table-container tbody tr:hover {
-  background: unset;
+  background: color-mix(in oklab, var(--darkgray) 10%, transparent);
 }
 
 /* 表格内代码与链接的可读性 */
