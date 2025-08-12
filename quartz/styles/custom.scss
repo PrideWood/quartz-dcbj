@@ -146,30 +146,41 @@ html[reader-mode="on"] body::before {
 
 /* —— Quartz 表格定制（无圆角 / 自适应滚动 / 表头底纹 —— */
 
-/* 外层容器：仅在溢出时才出现横向滚动 */
+/* 外层容器：仅在溢出时才出现横向滚动（不改左边距） */
 .table-container {
   display: block;
   width: 100%;
   max-width: 100%;
   margin: 1rem 0;
+  padding: 0;
+  /* 确保容器本身不加左右 padding */
   overflow-x: auto;
-  /* 只有超宽时才出现滚动条 */
+  /* 仅超宽时出现滚动条 */
   -webkit-overflow-scrolling: touch;
   scrollbar-gutter: stable both-edges;
-  /* 可选：减少滚动条出现时的抖动 */
 }
 
-/* 内部表格：全宽，无圆角，不制造额外溢出 */
+/* 只在右侧内缩：左侧保持贴齐，右侧缩进 var(--right-inset) */
+:root {
+  --right-inset: 1rem;
+}
+
+/* 想要更窄/更宽就调这个值 */
+
 .table-container>table {
-  width: 98% !important;
+  width: calc(100% - var(--right-inset)) !important;
+  /* 总宽减去右侧缩进 */
+  margin-left: 0 !important;
+  /* 左侧贴齐 */
+  margin-right: 0 !important;
+  /* 右侧留出缩进空间 */
   table-layout: auto;
-  /* 列宽稳定；要按内容自适应改成 auto */
   border-collapse: collapse;
   border: 1px solid var(--lightgray);
   border-radius: 0;
-  /* 取消圆角 */
   background: transparent;
 }
+
 
 /* 表头：加底纹 比偶数行的底纹更深*/
 .table-container thead th {
