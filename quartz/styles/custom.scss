@@ -143,3 +143,83 @@ html[reader-mode="on"] body::before {
     transition: opacity .5s ease;
   }
 }
+
+/* —— Quartz 表格定制（无圆角 / 自适应滚动 / 表头底纹 —— */
+
+/* 外层容器：仅在溢出时才出现横向滚动 */
+.table-container {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 1rem 0;
+  overflow-x: auto;
+  /* 只有超宽时才出现滚动条 */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable both-edges;
+  /* 可选：减少滚动条出现时的抖动 */
+}
+
+/* 内部表格：全宽，无圆角，不制造额外溢出 */
+.table-container>table {
+  width: 98% !important;
+  table-layout: auto;
+  /* 列宽稳定；要按内容自适应改成 auto */
+  border-collapse: collapse;
+  border: 1px solid var(--lightgray);
+  border-radius: 0;
+  /* 取消圆角 */
+  background: transparent;
+}
+
+/* 表头：加底纹 比偶数行的底纹更深*/
+.table-container thead th {
+  padding: 0.65rem 0.8rem;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid var(--lightgray);
+  background: color-mix(in oklab, var(--highlight) 60%, transparent);
+}
+
+
+/* 单元格：换行友好，右侧边线，最后一列不画线 */
+.table-container td,
+.table-container th {
+  padding: 0.6rem 0.8rem;
+  vertical-align: top;
+  border-right: 0px solid var(--lightgray);
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.table-container tr>*:last-child {
+  border-right: 0;
+}
+
+/* 交替底纹（偶数行） */
+.table-container tbody tr:nth-child(even) {
+  background: color-mix(in oklab, var(--lightgray) 40%, transparent);
+}
+
+/* 深色模式微调 */
+:root[saved-theme="dark"] .table-container thead th {
+  background: color-mix(in oklab, var(--darkgray) 60%, transparent);
+}
+
+:root[saved-theme="dark"] .table-container tbody tr:nth-child(even) {
+  background: color-mix(in oklab, var(--darkgray) 40%, transparent);
+}
+
+:root[saved-theme="dark"] .table-container tbody tr:hover {
+  background: unset;
+}
+
+/* 表格内代码与链接的可读性 */
+.table-container td code,
+.table-container th code {
+  white-space: pre-wrap;
+  font-size: 0.95em;
+}
+
+.table-container td a {
+  text-decoration: underline;
+}
