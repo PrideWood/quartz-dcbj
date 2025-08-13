@@ -16,6 +16,9 @@ export default (() => {
       .shortshare-toast.show{ opacity:1; transform:translateY(0); }
       @media (prefers-color-scheme: light){
         .shortshare-toast{ background:rgba(0,0,0,.85); color:#fff; }
+      @media (max-width: 1200px){
+        a[href="#share-this-page"]{ display: none; }
+        }
       }
     `
 
