@@ -1,6 +1,7 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
 import { h } from "preact"
+import ShareShortlinkHandler from "./quartz/components/ShareShortlinkHandler"
 
 const ExternalLinkButton = () =>
   h(
@@ -39,6 +40,7 @@ export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
   afterBody: [
+    ShareShortlinkHandler(),
     Component.ConditionalRender({
       condition: (page) => page.fileData.slug === "index",
       component: Component.Comments({
