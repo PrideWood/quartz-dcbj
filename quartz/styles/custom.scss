@@ -2,52 +2,127 @@
 
 // put your custom CSS here!
 
-
 /* 基础：亮色（默认） */
 html,
 body {
   min-height: 100%;
+  margin: 0;
+  background: transparent;
 }
 
+/* —— 把原来的渐变背景换成“纸张”底 —— */
 body::before {
   content: "";
   position: fixed;
-  inset: 0;
+  inset: -2px;
+  /* 出血，避免边缘 1px 缝 */
   z-index: -1;
   pointer-events: none;
 
+  /* 纸张底色 + 很轻的四周晕影（不再用彩色渐变） */
   background:
-    radial-gradient(1000px 600px at 10% -10%, rgba(255, 200, 160, .28), transparent 60%),
-    radial-gradient(800px 500px at 90% 120%, rgba(120, 180, 255, .22), transparent 60%),
-    linear-gradient(120deg, #EFF2EC, #F3FFF0 50%, #EAF3FF);
-  filter: saturate(1.05) contrast(1.02);
+    /* 顶部一点高光，底部一点阴影（非常轻） */
+    linear-gradient(180deg, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0)) 0 0/100% 220px no-repeat,
+    linear-gradient(0deg, rgba(0, 0, 0, .04), rgba(0, 0, 0, 0)) 0 100%/100% 260px no-repeat,
+    /* 四角极轻暗角，模拟纸边厚度 */
+    radial-gradient(1200px 800px at -10% 10%, rgba(0, 0, 0, .03), transparent 60%),
+    radial-gradient(1200px 800px at 110% 10%, rgba(0, 0, 0, .03), transparent 60%),
+    radial-gradient(1200px 800px at 50% 120%, rgba(0, 0, 0, .035), transparent 65%),
+    /* 纸张的主色（微暖白） */
+    #FAF8F2;
+  /* 不再需要饱和/对比滤镜 */
+  filter: none;
 }
 
-/* 夜间：用 saved-theme="dark" 作为钩子 */
+/* 夜间：saved-theme="dark" */
 html[saved-theme="dark"] body::before {
   background:
-    radial-gradient(900px 560px at 15% -10%, rgba(255, 180, 120, .12), transparent 60%),
-    radial-gradient(700px 480px at 85% 120%, rgba(100, 150, 255, .12), transparent 60%),
-    linear-gradient(120deg, #0B1020, #0E1526 60%, #09121C);
-  filter: saturate(1) contrast(1.04);
+    linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, 0)) 0 0/100% 180px no-repeat,
+    radial-gradient(1200px 800px at 50% 120%, rgba(255, 255, 255, .06), transparent 65%),
+    #0E1218;
+  /* 深色纸 */
+  filter: none;
 }
 
-/* （可选）轻微噪点纹理 */
+/* —— 替换你现有的 body::after —— */
+/* —— 纸张纹理：更显眼（密度更高 + 对比更强） —— */
 body::after {
   content: "";
   position: fixed;
-  inset: 0;
+  inset: -2px;
   z-index: -1;
   pointer-events: none;
-  opacity: .06;
-  background-image: radial-gradient(rgba(0, 0, 0, .6) 1px, transparent 1px);
-  background-size: 2px 2px;
-  mix-blend-mode: soft-light;
+
+  /* 三层分形噪声（不同 seed/尺寸）+ 两层纤维纹（更明显） */
+  background:
+    /* 噪声 A：细颗粒，块更小 → 纹理更密 */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
+  <filter id='n1'>\
+    <feTurbulence type='fractalNoise' baseFrequency='1.25' numOctaves='4' seed='11' stitchTiles='stitch'/>\
+    <feColorMatrix type='saturate' values='0'/>\
+  </filter>\
+  <rect width='100%' height='100%' filter='url(%23n1)'/>\
+</svg>") 0 0/160px 160px repeat,
+
+    /* 噪声 B：中颗粒，打破重复周期 */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
+  <filter id='n2'>\
+    <feTurbulence type='fractalNoise' baseFrequency='1.25' numOctaves='3' seed='37' stitchTiles='stitch'/>\
+    <feColorMatrix type='saturate' values='0'/>\
+  </filter>\
+  <rect width='100%' height='100%' filter='url(%23n2)'/>\
+</svg>") 0 0/300px 300px repeat,
+
+    /* 噪声 C：更粗一层，增强对比 */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
+  <filter id='n3'>\
+    <feTurbulence type='fractalNoise' baseFrequency='1.35' numOctaves='2' seed='73' stitchTiles='stitch'/>\
+    <feColorMatrix type='saturate' values='0'/>\
+  </filter>\
+  <rect width='100%' height='100%' filter='url(%23n3)'/>\
+</svg>") 0 0/520px 520px repeat,
+
+    /* 纤维纹（更明显一点，但仍然轻） */
+    repeating-linear-gradient(8deg, rgba(0, 0, 0, .08) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(-12deg, rgba(0, 0, 0, .06) 0 1px, transparent 1px 9px);
+
+  /* 整体强度：从原来的 ~0.055 提高到 0.10 */
+  opacity: .35;
+  mix-blend-mode: multiply;
 }
 
-/* 如果还有“阅读模式”可能改变背景，可按需覆盖 */
-html[reader-mode="on"] body::before {
-  filter: saturate(.18) contrast(1.0);
+html[saved-theme="dark"] body::after {
+  background:
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
+  <filter id='n1'><feTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='4' seed='11' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter>\
+  <rect fill='#fff' opacity='.9' width='100%' height='100%' filter='url(%23n1)'/>\
+</svg>") 0 0/160px 160px repeat,
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
+  <filter id='n2'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' seed='37' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter>\
+  <rect fill='#fff' opacity='.9' width='100%' height='100%' filter='url(%23n2)'/>\
+</svg>") 0 0/300px 300px repeat,
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
+  <filter id='n3'><feTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='2' seed='73' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter>\
+  <rect fill='#fff' opacity='.9' width='100%' height='100%' filter='url(%23n3)'/>\
+</svg>") 0 0/520px 520px repeat,
+    repeating-linear-gradient(8deg, rgba(255, 255, 255, .10) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(-12deg, rgba(255, 255, 255, .08) 0 1px, transparent 1px 9px);
+
+  opacity: .14;
+  /* 暗色下略强一点 */
+  mix-blend-mode: screen;
+}
+
+
+/* （可选）阅读模式弱化纹理与晕影 */
+html[reader-mode="on"] body::after {
+  opacity: .02;
 }
 
 /* 让左侧 sidebar 背景透明，渐变背景透上来 */
