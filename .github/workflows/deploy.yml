@@ -18,11 +18,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Site Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Checkout Content Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: PrideWood/quartz-content
           token: '${{ secrets.ACCESS_TOKEN }}'
@@ -34,7 +34,7 @@ jobs:
           # 根据需要添加更多要清理的文件/文件夹
           find content -name ".DS_Store" -delete
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -43,7 +43,7 @@ jobs:
       - name: Build Quartz
         run: npx quartz build
       - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./public
   deploy:
