@@ -1,11 +1,23 @@
 name: Deploy Quartz to GitHub Pages
 on:
-  schedule:
-    - cron: 0 */6 * * *
   push:
     branches:
       - v4
-  workflow_dispatch: null
+    paths:
+      - .github/workflows/deploy.yml
+      - content/**
+      - index.d.ts
+      - globals.d.ts
+      - package-lock.json
+      - package.json
+      - quartz/**
+      - quartz.config.ts
+      - quartz.layout.ts
+      - tsconfig.json
+  repository_dispatch:
+    types:
+      - content-updated
+  workflow_dispatch:
 permissions:
   contents: read
   pages: write
