@@ -20,6 +20,21 @@
   font-display: swap;
 }
 
+strong,
+b,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.page-title,
+.folder-title,
+thead {
+  font-weight: 600;
+  text-shadow: 0.02em 0 0 currentColor;
+}
+
 // put your custom CSS here!
 
 /* 基础：亮色（默认） */
