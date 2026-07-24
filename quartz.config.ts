@@ -23,7 +23,8 @@ const config: QuartzConfig = {
       fontOrigin: "local",
       cdnCaching: true,
       typography: {
-        header: "Schibsted Grotesk",
+        title: "LXGW WenKai GB",
+        header: "LXGW WenKai GB",
         body: "LXGW WenKai GB",
         code: "IBM Plex Mono",
       },
