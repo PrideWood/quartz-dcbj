@@ -124,7 +124,9 @@ button.desktop-explorer {
     list-style: none;
     margin: 0;
     padding: 0;
-    overscroll-behavior: contain;
+    // Let wheel input continue to the page after the tree reaches an edge.
+    // Containing it here makes scrolling appear to get stuck over the Explorer.
+    overscroll-behavior-y: auto;
 
     & li > a {
       color: var(--dark);
