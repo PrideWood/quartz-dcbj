@@ -4,8 +4,9 @@
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
-  min-height: 1.4rem;
-  flex: 0 0.5 auto;
+  // Use the remaining sidebar height and allow the heading list to scroll.
+  min-height: 0;
+  flex: 1 1 0;
   &:has(button.toc-header.collapsed) {
     flex: 0 1 1.4rem;
   }
@@ -46,6 +47,10 @@ ul.toc-content.overflow {
   max-height: calc(100% - 2rem);
   overscroll-behavior: contain;
   list-style: none;
+  min-height: 0;
+  flex: 1 1 auto;
+  padding-bottom: 0.5rem;
+  box-sizing: border-box;
 
   & > li > a {
     color: var(--dark);

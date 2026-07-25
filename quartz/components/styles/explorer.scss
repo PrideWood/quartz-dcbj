@@ -31,8 +31,10 @@
   flex-direction: column;
   overflow-y: hidden;
 
-  min-height: 1.2rem;
-  flex: 0 1 auto;
+  // Fill the unused sidebar height so that the tree can scroll within it.
+  // `min-height: 0` is required for a flex child to shrink below its content.
+  min-height: 0;
+  flex: 1 1 0;
   &.collapsed {
     flex: 0 1 1.2rem;
     & .fold {
@@ -113,6 +115,10 @@ button.desktop-explorer {
   overflow: hidden;
   overflow-y: auto;
   margin-top: 0.5rem;
+  min-height: 0;
+  flex: 1 1 auto;
+  padding-bottom: 0.5rem;
+  box-sizing: border-box;
 
   & ul {
     list-style: none;
