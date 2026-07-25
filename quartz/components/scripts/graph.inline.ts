@@ -53,6 +53,8 @@ type NodeRenderData = GraphicsInfo & {
 }
 
 const localStorageKey = "graph-visited"
+const highlightColor = "#006b88"
+
 function getVisited(): Set<SimpleSlug> {
   return new Set(JSON.parse(localStorage.getItem(localStorageKey) ?? "[]"))
 }
@@ -209,7 +211,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     const numLinks = graphData.links.filter(
       (l) => l.source.id === d.id || l.target.id === d.id,
     ).length
-    return 2 + Math.sqrt(numLinks)
+    return (2 + Math.sqrt(numLinks)) * 1.5
   }
 
   let hoveredNodeId: string | null = null
@@ -262,7 +264,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
         alpha = l.active ? 1 : 0.2
       }
 
-      l.color = l.active ? computedStyleMap["--gray"] : computedStyleMap["--lightgray"]
+      l.color = l.active ? highlightColor : computedStyleMap["--lightgray"]
       tweenGroup.add(new Tweened<LinkRenderData>(l).to({ alpha }, 200))
     }
 
@@ -322,6 +324,18 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     const tweenGroup = new TweenGroup()
     for (const n of nodeRenderData) {
       let alpha = 1
+      const isTagNode = n.simulationData.id.startsWith("tags/")
+
+      n.gfx
+        .clear()
+        .circle(0, 0, nodeRadius(n.simulationData))
+        .fill({
+          color: n.active ? highlightColor : isTagNode ? computedStyleMap["--light"] : n.color,
+        })
+
+      if (isTagNode && !n.active) {
+        n.gfx.stroke({ width: 2, color: computedStyleMap["--tertiary"] })
+      }
 
       // if we are hovering over a node, we want to highlight the immediate neighbours
       if (hoveredNodeId !== null && focusOnHover) {

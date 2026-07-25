@@ -205,7 +205,9 @@ async function setupExplorer(currentSlug: FullSlug) {
     const explorerUl = explorer.querySelector(".explorer-ul")
     if (!explorerUl) continue
 
-    // Create and insert new content
+    // Rebuild the tree on every SPA navigation. Keep the overflow sentinel so
+    // its observer continues to provide the bottom fade, but replace all
+    // existing tree entries instead of appending another copy.
     const fragment = document.createDocumentFragment()
     for (const child of trie.children) {
       const node = child.isFolder
@@ -214,7 +216,8 @@ async function setupExplorer(currentSlug: FullSlug) {
 
       fragment.appendChild(node)
     }
-    explorerUl.insertBefore(fragment, explorerUl.firstChild)
+    const overflowEnd = explorerUl.querySelector(".overflow-end")
+    explorerUl.replaceChildren(fragment, ...(overflowEnd ? [overflowEnd] : []))
 
     // restore explorer scrollTop position if it exists
     const scrollTop = sessionStorage.getItem("explorerScrollTop")
