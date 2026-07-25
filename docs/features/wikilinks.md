@@ -18,7 +18,11 @@ This is enabled as a part of [[Obsidian compatibility]] and can be configured an
 ### Embeds
 
 - `![[Path to image]]`: embeds an image into the page
+- `![[Path to image|300]]`: embeds an image with a 300px width
 - `![[Path to image|100x145]]`: embeds an image into the page with dimensions 100px by 145px
+- `![Alt text|300](Path to image)`: embeds a standard Markdown image with a 300px width
+- `![300](Path to image)`: shorthand for a standard Markdown image with a 300px width
+- `![Alt text](Path to image|300)`: alternative standard Markdown syntax with the width after the image path
 - `![[Path to file]]`: transclude an entire page
 - `![[Path to file#Anchor]]`: transclude everything under the header `Anchor`
 - `![[Path to file#^b15695]]`: transclude block with ID `^b15695`

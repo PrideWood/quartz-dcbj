@@ -7,6 +7,7 @@ import {
   DefinitionContent,
   Paragraph,
   Code,
+  Image,
 } from "mdast"
 import { Element, Literal, Root as HtmlRoot } from "hast"
 import { ReplaceFunction, findAndReplace as mdastFindReplace } from "mdast-util-find-and-replace"
@@ -147,6 +148,12 @@ const videoExtensionRegex = new RegExp(/\.(mp4|webm|ogg|avi|mov|flv|wmv|mkv|mpg|
 const wikilinkImageEmbedRegex = new RegExp(
   /^(?<alt>(?!^\d*x?\d*$).*?)?(\|?\s*?(?<width>\d+)(x(?<height>\d+))?)?$/,
 )
+
+// Obsidian uses a numeric image alias (for example `![[image.png|300]]`) to set
+// an image's dimensions. Support the equivalent convention for standard Markdown
+// images too: `![Alt text|300](image.png)` or `![300](image.png)`.
+const markdownImageDimensionsRegex = /^(?:(?<alt>.*?)\|)?\s*(?<width>\d+)(?:x(?<height>\d+))?$/
+const markdownImageUrlDimensionsRegex = /^(?<url>.+?)\|\s*(?<width>\d+)(?:x(?<height>\d+))?$/
 
 export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>> = (userOpts) => {
   const opts = { ...defaultOptions, ...userOpts }
@@ -390,6 +397,32 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
             })
           }
           mdastFindReplace(tree, replacements)
+
+          // Apply Obsidian-style dimensions to regular Markdown images as well.
+          // This also handles external wikilink embeds, which are converted to a
+          // Markdown image by the replacement above.
+          visit(tree, "image", (node: Image) => {
+            const altMatch = node.alt?.match(markdownImageDimensionsRegex)
+            const urlMatch = node.url.match(markdownImageUrlDimensionsRegex)
+            const match = altMatch ?? urlMatch
+
+            if (!match?.groups?.width) return
+
+            if (altMatch) {
+              node.alt = altMatch.groups?.alt?.trim() ?? ""
+            } else if (urlMatch?.groups?.url) {
+              node.url = urlMatch.groups.url
+            }
+
+            node.data = {
+              ...node.data,
+              hProperties: {
+                ...node.data?.hProperties,
+                width: match.groups.width,
+                height: match.groups.height ?? "auto",
+              },
+            }
+          })
         }
       })
 
